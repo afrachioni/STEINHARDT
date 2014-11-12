@@ -1,4 +1,4 @@
-This is a package for LAMMPS, which includes a few compute classes for calculation of Steinhardt parameters and various related quantities.  This package was last successfully built against the **13 May 2014** version of LAMMPS.  Compute-specific information follows:
+This is a package for LAMMPS, which includes a few compute classes for calculation of Steinhardt parameters and various related quantities.  This package was last successfully built against the **5 Nov 2014** version of LAMMPS.  Compute-specific information follows:
 
 ---
 

@@ -111,8 +111,8 @@ void ComputeNCutAtom::compute_peratom()
   // invoke full neighbor list (will copy or build if necessary)
 
   //XXX Again, use this flag so that we can change_box, run 0, and have updates
-  //XXX                            V
-  neighbor->build_one(list->index, 1);
+  //XXX                     V
+  neighbor->build_one(list, 1);
 
   inum = list->inum;
   ilist = list->ilist;

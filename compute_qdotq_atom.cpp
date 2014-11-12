@@ -147,7 +147,7 @@ void ComputeQDotQ::compute_peratom()
 		vector_atom = pattern;
 	}
 
-	neighbor->build_one(list->index);
+	neighbor->build_one(list);
 
 	inum = list->inum;
 	gnum = list->gnum;
