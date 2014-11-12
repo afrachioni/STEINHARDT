@@ -1,4 +1,4 @@
-This is an experimental version of LAMMPS, which presently differs from the official distribution only by the addition of a few compute classes (and makefiles for the author's machines).  The vast majority of source comprises the **13 May 2014** version of LAMMPS.  The following have been added:
+This is a package for LAMMPS, which includes a few compute classes for calculation of Steinhardt parameters and various related quantities.  This package was last successfully built against the **13 May 2014** version of LAMMPS.  Compute-specific information follows:
 
 ---
 
@@ -74,4 +74,4 @@ Usage:
 ```
 compute ID group-ID cluster_qdotq/atom cutoff qdotq-ID threshold
 ```
-where `qlm-ID is the ID of a compute of style qlm/atom.
+where `qlm-ID` is the ID of a compute of style qlm/atom.
