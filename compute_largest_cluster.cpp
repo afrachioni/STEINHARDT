@@ -77,8 +77,8 @@ void ComputeLargestCluster::init()
 
 double ComputeLargestCluster::compute_scalar()
 {
-	if (comm->me == 0)
-		fprintf (stderr, "Entering lc::compute_scalar()\n");
+	//if (comm->me == 0)
+		//fprintf (stderr, "Entering lc::compute_scalar()\n");
 	invoked_scalar = update->ntimestep;
 
 	// This is a very naive, not scalable implementation so that I can get up and running
@@ -108,18 +108,18 @@ double ComputeLargestCluster::compute_scalar()
 	//
 	//
 	//
-	if (update->whichflag == 0)
-		if (source_compute->invoked_peratom != update->ntimestep) {
-			fprintf (stderr, "About to run 0 internally\n");
-			input->one("run 0 # internal from compute LC");
-			fprintf (stderr, "Finished with internal run 0\n");
-		}
+	//if (update->whichflag == 0)
+		//if (source_compute->invoked_peratom != update->ntimestep) {
+			//fprintf (stderr, "About to run 0 internally\n");
+			//input->one("run 0 # internal from compute LC");
+			//fprintf (stderr, "Finished with internal run 0\n");
+		//}
 
 
 	if (!source_compute->invoked_flag) // TODO do we need timestep logic?
 		source_compute->compute_peratom();
-	if (comm->me == 0)
-		fprintf (stderr, "Returned from source invocation\n");
+	//if (comm->me == 0)
+		//fprintf (stderr, "Returned from source invocation\n");
 	//return 7;
 
 	double *source = source_compute->vector_atom;
@@ -133,16 +133,16 @@ double ComputeLargestCluster::compute_scalar()
 
 	int nlocal_list[comm->nprocs];
 	int offsets[comm->nprocs];
-	if (comm->me == 0)
-		fprintf (stderr, "Gathering nlocal\n");
+	//if (comm->me == 0)
+		//fprintf (stderr, "Gathering nlocal\n");
 	MPI_Gather (&nlocal, 1, MPI_INT, nlocal_list, 1, MPI_INT, 0, world);
 
 	offsets[0] = 0;
 	for (int i = 1; i < comm->nprocs; ++i)
 		offsets[i] = offsets[i - 1] + nlocal_list[i - 1];
 
-	if (comm->me == 0)
-		fprintf (stderr, "Gatherving\n");
+	//if (comm->me == 0)
+		//fprintf (stderr, "Gatherving\n");
 	MPI_Gatherv (source, nlocal, MPI_DOUBLE, global_clusters, nlocal_list, offsets, MPI_DOUBLE, 0, world);
 
 	double max = -1;
