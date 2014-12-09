@@ -98,7 +98,6 @@ double ComputeLargestCluster::compute_scalar()
     }
   }
 	*/
-	//if (update->whichflag == 0)
 		//if (source_compute->invoked_peratom != update->ntimestep) {
 			//fprintf (stderr, "About to run 0 internally\n");
 			//input->one("run 0 # internal from compute LC");
@@ -120,7 +119,6 @@ double ComputeLargestCluster::compute_scalar()
 
 	int nlocal_list[comm->nprocs];
 	int offsets[comm->nprocs];
-
 	MPI_Gather (&nlocal, 1, MPI_INT, nlocal_list, 1, MPI_INT, 0, world);
 
 	offsets[0] = 0;
