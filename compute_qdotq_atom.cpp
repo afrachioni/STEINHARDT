@@ -212,9 +212,6 @@ void ComputeQDotQ::compute_peratom()
 		current_y = x[current_index][1];
 		current_z = x[current_index][2];
 
-		// zero buffer XXX necessary?
-		//for (int k = 0; k < 4 * l + 2; ++k)
-			//qlm_buffer[current_index][k] = 0;
 		for (int m = -l; m < l + 1; ++m) {
 			qlm = std::complex<double> (0, 0);
 			for (int jjj = 0; jjj < nnearest[current_index]; ++jjj) {
