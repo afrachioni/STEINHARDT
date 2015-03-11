@@ -106,7 +106,7 @@ void ComputeClusterQDotQAtom::init_list(int id, NeighList *ptr)
 
 void ComputeClusterQDotQAtom::compute_peratom()
 {
-  int i,j,ii,jj,inum,jnum;
+  int i,j,ii,jj,inum,gnum,jnum;
   double xtmp,ytmp,ztmp,delx,dely,delz,rsq;
   int *ilist,*jlist,*numneigh,**firstneigh;
 
@@ -129,6 +129,7 @@ void ComputeClusterQDotQAtom::compute_peratom()
   neighbor->build_one(list);
 
   inum = list->inum;
+  gnum = list->gnum;
   ilist = list->ilist;
   numneigh = list->numneigh;
   firstneigh = list->firstneigh;
@@ -161,7 +162,7 @@ void ComputeClusterQDotQAtom::compute_peratom()
     change = 0;
     while (1) {
       done = 1;
-      for (ii = 0; ii < inum; ii++) {
+      for (ii = 0; ii < inum + gnum; ++ii) {
         i = ilist[ii];
         if (!(mask[i] & groupbit)) continue;
 

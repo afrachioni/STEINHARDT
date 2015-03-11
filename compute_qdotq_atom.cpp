@@ -150,7 +150,11 @@ void ComputeQDotQ::compute_peratom()
 	neighbor->build_one(list);
 
 	inum = list->inum;
-	gnum = list->gnum;
+	gnum = atom->nghost;
+	fprintf (stderr, "gnum: %d\n", gnum);
+	fprintf (stderr, "inum: %d\n", inum);
+	fprintf (stderr, "atom->nlocal: %d\n", atom->nlocal);
+	fprintf (stderr, "ghostflag: %d\n", list->ghostflag);
 	ilist = list->ilist;
 	numneigh = list->numneigh;
 	firstneigh = list->firstneigh;
@@ -164,13 +168,15 @@ void ComputeQDotQ::compute_peratom()
 	int nerror = 0;
 
 	for (ii = 0; ii < inum + gnum; ++ii) {
-		i = ilist[ii];
+		//i = ilist[ii];
+		i = ii;
 		if (!(mask[i] & groupbit)) continue;
 		xtmp = x[i][0];
 		ytmp = x[i][1];
 		ztmp = x[i][2];
 		jlist = firstneigh[i];
 		jnum = numneigh[i];
+		//fprintf (stderr, "numneigh[i]: %d\t", jnum);
 
 		n = 0;
 		for (jj = 0; jj < jnum; ++jj) {
@@ -189,7 +195,8 @@ void ComputeQDotQ::compute_peratom()
 				}
 			}
 		}
-			nnearest[i] = n;
+		fprintf (stderr, "nnearest[%d:%d]: %d\t", ii, i, n);
+		nnearest[i] = n;
 	}
 	int nerrorall;
 	MPI_Allreduce (&nerror, &nerrorall, 1, MPI_INT, MPI_SUM, world);
@@ -207,7 +214,8 @@ void ComputeQDotQ::compute_peratom()
 	std::complex<double> qlm;
 	double pi = boost::math::constants::pi<double>();
 	for (int iii = 0; iii < inum + gnum; ++iii) {
-		current_index = ilist[iii];
+		//current_index = ilist[iii];
+		current_index = ii;
 		current_x = x[current_index][0];
 		current_y = x[current_index][1];
 		current_z = x[current_index][2];
@@ -244,7 +252,8 @@ void ComputeQDotQ::compute_peratom()
 	// Execute dot product
 	for (int iii = 0; iii < inum + gnum; ++iii) {
 		int count = 0;
-		current_index = ilist[iii];
+		//current_index = ilist[iii];
+		current_index = iii;
 		if (!(mask[current_index] & groupbit)) continue;
 		
 		double *my_qlm = qlm_buffer[current_index];

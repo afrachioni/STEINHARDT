@@ -142,6 +142,7 @@ void ComputeQLMAtom::compute_peratom()
 
 	inum = list->inum;
 	gnum = list->gnum;
+	fprintf (stderr, "gnum: %d\n", gnum);
 	ilist = list->ilist;
 	numneigh = list->numneigh;
 	firstneigh = list->firstneigh;
