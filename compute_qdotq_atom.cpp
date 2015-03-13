@@ -99,6 +99,7 @@ void ComputeQDotQ::init()
 		error->warning(FLERR, "Compute qdotq/atom cutoff may be too large to "
 				"find ghost atom neighbors");
 
+	fprintf (stderr, "Registering a neighbor request\n");
 	// Occasional full neighbor list, with ghosts
 	int irequest = neighbor->request((void *) this);
 	neighbor->requests[irequest]->pair = 0;
@@ -107,6 +108,7 @@ void ComputeQDotQ::init()
 	neighbor->requests[irequest]->full = 1;
 	neighbor->requests[irequest]->occasional = 1; // This was zero for some reason
 	neighbor->requests[irequest]->ghost = 1;
+	neighbor->requests[irequest]->copy = 0;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -168,8 +170,7 @@ void ComputeQDotQ::compute_peratom()
 	int nerror = 0;
 
 	for (ii = 0; ii < inum + gnum; ++ii) {
-		//i = ilist[ii];
-		i = ii;
+		i = ilist[ii];
 		if (!(mask[i] & groupbit)) continue;
 		xtmp = x[i][0];
 		ytmp = x[i][1];
@@ -214,8 +215,7 @@ void ComputeQDotQ::compute_peratom()
 	std::complex<double> qlm;
 	double pi = boost::math::constants::pi<double>();
 	for (int iii = 0; iii < inum + gnum; ++iii) {
-		//current_index = ilist[iii];
-		current_index = ii;
+		current_index = ilist[iii];
 		current_x = x[current_index][0];
 		current_y = x[current_index][1];
 		current_z = x[current_index][2];
@@ -249,11 +249,10 @@ void ComputeQDotQ::compute_peratom()
 	}
 
 
-	// Execute dot product
-	for (int iii = 0; iii < inum + gnum; ++iii) {
+	// Execute dot product for all atoms owned by this processor
+	for (int iii = 0; iii < inum; ++iii) {
 		int count = 0;
-		//current_index = ilist[iii];
-		current_index = iii;
+		current_index = ilist[iii];
 		if (!(mask[current_index] & groupbit)) continue;
 		
 		double *my_qlm = qlm_buffer[current_index];
