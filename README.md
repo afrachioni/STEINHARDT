@@ -55,11 +55,11 @@ compute ID group-ID qlm/atom l cutoff
 
 
 ####`compute qdotq/atom`:
-*l* hardcoded to 6.  Number of neighbors with ||*q<sup>(i)</sup><sub>l</sub>*  ·  *q<sup>(j)</sup><sub>l</sub>*|| above some threshold.  See Wolde 96 [16].
+Number of neighbors with ||*q<sup>(i)</sup><sub>l</sub>*  ·  *q<sup>(j)</sup><sub>l</sub>*|| above some threshold.  See Wolde 96 [16].
 
 Usage:
 ```
-compute ID group-ID qdotq/atom qlm-ID cutoff threshold
+compute ID group-ID qdotq/atom l cutoff threshold
 ```
 where `qlm-ID` is the ID of a compute of style qlm/atom.
 

@@ -42,14 +42,15 @@ using namespace LAMMPS_NS;
 ComputeQDotQ::ComputeQDotQ(LAMMPS *lmp, int narg, char **arg) :
 	Compute(lmp, narg, arg)
 {
-	// Usage: compute ID group-ID qdotq/atom qlm-ID cutoff threshold
+	// Usage: compute ID group-ID qdotq/atom l cutoff threshold
 
 	if (narg != 6) error->all(FLERR, "Illegal compute largest cluster command");
 
 	peratom_flag = 1;
 	size_peratom_cols = 0;
 
-	l = 6; // XXX
+	l = atoi(arg[3]); //TODO same story from compute_boop
+	if (l < 1 || l > 8) error->all(FLERR, "Illegal compute BOOP command");
 
 	/*
 	int icompute = modify->find_compute(arg[3]);
@@ -99,7 +100,6 @@ void ComputeQDotQ::init()
 		error->warning(FLERR, "Compute qdotq/atom cutoff may be too large to "
 				"find ghost atom neighbors");
 
-	fprintf (stderr, "Registering a neighbor request\n");
 	// Occasional full neighbor list, with ghosts
 	int irequest = neighbor->request((void *) this);
 	neighbor->requests[irequest]->pair = 0;
@@ -108,7 +108,7 @@ void ComputeQDotQ::init()
 	neighbor->requests[irequest]->full = 1;
 	neighbor->requests[irequest]->occasional = 1; // This was zero for some reason
 	neighbor->requests[irequest]->ghost = 1;
-	neighbor->requests[irequest]->copy = 0;
+	//neighbor->requests[irequest]->copy = 0;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -153,10 +153,6 @@ void ComputeQDotQ::compute_peratom()
 
 	inum = list->inum;
 	gnum = atom->nghost;
-	fprintf (stderr, "gnum: %d\n", gnum);
-	fprintf (stderr, "inum: %d\n", inum);
-	fprintf (stderr, "atom->nlocal: %d\n", atom->nlocal);
-	fprintf (stderr, "ghostflag: %d\n", list->ghostflag);
 	ilist = list->ilist;
 	numneigh = list->numneigh;
 	firstneigh = list->firstneigh;
@@ -177,7 +173,6 @@ void ComputeQDotQ::compute_peratom()
 		ztmp = x[i][2];
 		jlist = firstneigh[i];
 		jnum = numneigh[i];
-		//fprintf (stderr, "numneigh[i]: %d\t", jnum);
 
 		n = 0;
 		for (jj = 0; jj < jnum; ++jj) {
@@ -196,7 +191,6 @@ void ComputeQDotQ::compute_peratom()
 				}
 			}
 		}
-		fprintf (stderr, "nnearest[%d:%d]: %d\t", ii, i, n);
 		nnearest[i] = n;
 	}
 	int nerrorall;
